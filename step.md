@@ -61,8 +61,7 @@ kubectl create namespace argocd
 kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 
 To expose it:
-
-
+kubectl port-forward --address 0.0.0.0 svc/argocd-server 8080:443 -n argocd
 
 Get the Admin Password
 
@@ -75,9 +74,6 @@ Login to ArgoCD CLI
 Install argocd CLI (from ArgoCD releases ), then:
 
 argocd login <ARGOCD_SERVER>
-
-port-forwarding:
-kubectl port-forward svc/argocd-server -n argocd 8080:443
 
 argocd login Public IPv4 address:8080
 
@@ -108,8 +104,18 @@ Made this installation the default for injection and validation.
 
 Add a namespace label to instruct Istio to automatically inject Envoy sidecar proxies when you deploy your application later:
 
+injecting the istio in the namespace
 $ kubectl label namespace default istio-injection=enabled
 namespace/default labeled
+ Confirm the istio is injected:
+istio-1.27.1$ kubectl get ns default --show-labels
 
+Deploy the microservice on Argocd by connecting to the repo
 
+Deploy all the istio management 
 kubectl apply -f samples/addons
+
+kubectl get svc -n istio-system
+
+kubectl port-forward svc/kiali -n istio-system --address 0.0.0.0 20001:20001
+
