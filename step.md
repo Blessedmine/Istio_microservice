@@ -119,3 +119,4 @@ kubectl get svc -n istio-system
 
 kubectl port-forward svc/kiali -n istio-system --address 0.0.0.0 20001:20001
 
+To create a fast rollback on Argo rollout, manifest is created and easy roll back is created for the email service
